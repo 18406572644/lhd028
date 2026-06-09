@@ -75,6 +75,9 @@ const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   register: async (username, password, nickname, captchaKey, captchaCode) => {
+    if (!captchaKey || !captchaCode) {
+      throw new Error('验证码未加载或未填写，请刷新验证码后重试');
+    }
     set({ loading: true });
     try {
       const data: any = await request.post(`/auth/register?captchaKey=${encodeURIComponent(captchaKey)}&captchaCode=${encodeURIComponent(captchaCode)}`, { username, password, nickname });

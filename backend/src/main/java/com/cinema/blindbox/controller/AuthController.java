@@ -21,8 +21,8 @@ public class AuthController {
     @PostMapping("/register")
     public ApiResponse<Map<String, Object>> register(
             @Valid @RequestBody RegisterRequest request,
-            @RequestParam("captchaKey") String captchaKey,
-            @RequestParam("captchaCode") String captchaCode) {
+            @RequestParam(value = "captchaKey", required = false) String captchaKey,
+            @RequestParam(value = "captchaCode", required = false) String captchaCode) {
         try {
             Map<String, Object> result = authService.register(request, captchaKey, captchaCode);
             return ApiResponse.success("注册成功", result);

@@ -38,11 +38,11 @@ public class AuthService {
     private final ConcurrentHashMap<String, String> captchaStore = new ConcurrentHashMap<>();
 
     public Map<String, Object> register(RegisterRequest request, String captchaKey, String captchaCode) {
-        if (captchaKey == null || captchaCode == null) {
+        if (captchaKey == null || captchaKey.trim().isEmpty() || captchaCode == null || captchaCode.trim().isEmpty()) {
             throw new RuntimeException("请输入验证码");
         }
         String expectedCode = captchaStore.remove(captchaKey);
-        if (expectedCode == null || !expectedCode.equalsIgnoreCase(captchaCode)) {
+        if (expectedCode == null || !expectedCode.equalsIgnoreCase(captchaCode.trim())) {
             throw new RuntimeException("验证码错误或已过期");
         }
 

@@ -11,18 +11,24 @@ export default function Login() {
   const [activeTab, setActiveTab] = useState('login');
   const [captchaImage, setCaptchaImage] = useState('');
   const [captchaKey, setCaptchaKey] = useState('');
-  const [captchaCode, setCaptchaCode] = useState('');
+  const [captchaLoading, setCaptchaLoading] = useState(false);
+  const [registerForm] = Form.useForm();
 
   const loadCaptcha = useCallback(async () => {
+    setCaptchaLoading(true);
     try {
       const data = await getCaptcha();
       setCaptchaImage(data.captchaImage);
       setCaptchaKey(data.captchaKey);
-      setCaptchaCode('');
+      registerForm.setFieldValue('captchaCode', '');
     } catch {
-      message.error('获取验证码失败');
+      setCaptchaImage('');
+      setCaptchaKey('');
+      message.error('获取验证码失败，请刷新重试');
+    } finally {
+      setCaptchaLoading(false);
     }
-  }, [getCaptcha]);
+  }, [getCaptcha, registerForm]);
 
   useEffect(() => {
     if (activeTab === 'register') {
@@ -41,18 +47,20 @@ export default function Login() {
     }
   };
 
-  const handleRegister = async (values: { username: string; password: string; nickname: string }) => {
-    if (!captchaCode) {
-      message.error('请输入验证码');
+  const handleRegister = async (values: { username: string; password: string; nickname: string; captchaCode: string }) => {
+    if (!captchaKey) {
+      message.error('验证码未加载，请刷新验证码后重试');
+      loadCaptcha();
       return;
     }
     try {
-      await register(values.username, values.password, values.nickname, captchaKey, captchaCode);
+      await register(values.username, values.password, values.nickname, captchaKey, values.captchaCode);
       initAuth();
       message.success('注册成功');
       navigate('/');
-    } catch {
-      message.error('注册失败，请稍后重试');
+    } catch (e: any) {
+      const msg = e?.response?.data?.message || e?.message || '注册失败，请稍后重试';
+      message.error(msg);
       loadCaptcha();
     }
   };
@@ -102,7 +110,7 @@ export default function Login() {
                 key: 'register',
                 label: <span className="text-retro-cream-dark">注册</span>,
                 children: (
-                  <Form onFinish={handleRegister} layout="vertical" size="large">
+                  <Form form={registerForm} onFinish={handleRegister} layout="vertical" size="large">
                     <Form.Item name="username" rules={[{ required: true, message: '请输入用户名' }]}>
                       <Input prefix={<UserOutlined className="text-retro-gold-dark" />} placeholder="用户名" />
                     </Form.Item>
@@ -112,13 +120,19 @@ export default function Login() {
                     <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
                       <Input.Password prefix={<LockOutlined className="text-retro-gold-dark" />} placeholder="密码" />
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item
+                      name="captchaCode"
+                      rules={[
+                        { required: true, message: '请输入验证码' },
+                        { len: 4, message: '验证码为4位字符' },
+                      ]}
+                    >
                       <div className="flex gap-2">
                         <Input
                           prefix={<SafetyOutlined className="text-retro-gold-dark" />}
                           placeholder="验证码"
-                          value={captchaCode}
-                          onChange={(e) => setCaptchaCode(e.target.value)}
+                          maxLength={4}
+                          disabled={!captchaKey}
                         />
                         <div className="flex items-center gap-1 shrink-0">
                           {captchaImage && (
@@ -134,13 +148,21 @@ export default function Login() {
                             icon={<ReloadOutlined />}
                             onClick={loadCaptcha}
                             size="small"
+                            loading={captchaLoading}
                             className="shrink-0"
                           />
                         </div>
                       </div>
                     </Form.Item>
                     <Form.Item>
-                      <Button type="primary" htmlType="submit" block loading={loading} className="!h-11">
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        block
+                        loading={loading}
+                        disabled={!captchaKey}
+                        className="!h-11"
+                      >
                         注册
                       </Button>
                     </Form.Item>
