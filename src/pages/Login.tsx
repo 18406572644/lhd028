@@ -1,14 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Tabs, message } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, MailOutlined, SafetyOutlined, ReloadOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import useAuthStore from '@/store/authStore';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, register, loading, initAuth } = useAuthStore();
+  const { login, register, loading, initAuth, getCaptcha } = useAuthStore();
   const [activeTab, setActiveTab] = useState('login');
+  const [captchaImage, setCaptchaImage] = useState('');
+  const [captchaKey, setCaptchaKey] = useState('');
+  const [captchaCode, setCaptchaCode] = useState('');
+
+  const loadCaptcha = useCallback(async () => {
+    try {
+      const data = await getCaptcha();
+      setCaptchaImage(data.captchaImage);
+      setCaptchaKey(data.captchaKey);
+      setCaptchaCode('');
+    } catch {
+      message.error('获取验证码失败');
+    }
+  }, [getCaptcha]);
+
+  useEffect(() => {
+    if (activeTab === 'register') {
+      loadCaptcha();
+    }
+  }, [activeTab, loadCaptcha]);
 
   const handleLogin = async (values: { username: string; password: string }) => {
     try {
@@ -22,13 +42,18 @@ export default function Login() {
   };
 
   const handleRegister = async (values: { username: string; password: string; nickname: string }) => {
+    if (!captchaCode) {
+      message.error('请输入验证码');
+      return;
+    }
     try {
-      await register(values.username, values.password, values.nickname);
+      await register(values.username, values.password, values.nickname, captchaKey, captchaCode);
       initAuth();
       message.success('注册成功');
       navigate('/');
     } catch {
       message.error('注册失败，请稍后重试');
+      loadCaptcha();
     }
   };
 
@@ -86,6 +111,33 @@ export default function Login() {
                     </Form.Item>
                     <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}>
                       <Input.Password prefix={<LockOutlined className="text-retro-gold-dark" />} placeholder="密码" />
+                    </Form.Item>
+                    <Form.Item>
+                      <div className="flex gap-2">
+                        <Input
+                          prefix={<SafetyOutlined className="text-retro-gold-dark" />}
+                          placeholder="验证码"
+                          value={captchaCode}
+                          onChange={(e) => setCaptchaCode(e.target.value)}
+                        />
+                        <div className="flex items-center gap-1 shrink-0">
+                          {captchaImage && (
+                            <img
+                              src={captchaImage}
+                              alt="captcha"
+                              className="h-9 rounded cursor-pointer"
+                              onClick={loadCaptcha}
+                              title="点击刷新验证码"
+                            />
+                          )}
+                          <Button
+                            icon={<ReloadOutlined />}
+                            onClick={loadCaptcha}
+                            size="small"
+                            className="shrink-0"
+                          />
+                        </div>
+                      </div>
                     </Form.Item>
                     <Form.Item>
                       <Button type="primary" htmlType="submit" block loading={loading} className="!h-11">

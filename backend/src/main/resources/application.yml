@@ -24,7 +24,9 @@ spring:
     time-zone: Asia/Shanghai
 
 jwt:
-  secret: cinema-blindbox-secret-key-2024
+  secret: ${JWT_SECRET:cinema-blindbox-secret-key-2024}
+  access-token-expiration: 1800000
+  refresh-token-expiration: 604800000
 
 file:
   upload-dir: ./uploads

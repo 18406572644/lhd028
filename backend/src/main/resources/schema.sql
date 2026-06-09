@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS `user` (
     nickname VARCHAR(100),
     avatar VARCHAR(500),
     favorite_genres VARCHAR(200),
+    login_attempt_count INT DEFAULT 0,
+    lock_time DATETIME,
+    password_migrated TINYINT(1) DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -100,3 +103,12 @@ INSERT INTO movie (title, genre, year, rating, director, actors, description, po
 ('大话西游之大圣娶亲', '喜剧/奇幻', 1995, 9.2, '刘镇伟', '周星驰,朱茵,莫文蔚', '至尊宝为了救紫霞仙子戴上紧箍咒，从此不能再爱', '/posters/westjourney.jpg', 99, '中国'),
 ('辛德勒的列表', '剧情/历史', 1993, 9.5, '史蒂文·斯皮尔伯格', '连姆·尼森,本·金斯利', '德国商人辛德勒在二战中倾家荡产拯救了一千多名犹太人', '/posters/schindler.jpg', 195, '美国'),
 ('龙猫', '动画/奇幻', 1988, 9.2, '宫崎骏', '日高法子,的場未華子', '两姐妹搬到乡下后遇到森林精灵龙猫，展开了一段温馨奇幻的冒险', '/posters/totoro.jpg', 86, '日本');
+
+CREATE TABLE IF NOT EXISTS refresh_token (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    token VARCHAR(500) NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    revoked_at DATETIME
+);

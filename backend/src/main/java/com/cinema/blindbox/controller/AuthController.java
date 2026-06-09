@@ -19,9 +19,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ApiResponse<Map<String, Object>> register(@Valid @RequestBody RegisterRequest request) {
+    public ApiResponse<Map<String, Object>> register(
+            @Valid @RequestBody RegisterRequest request,
+            @RequestParam("captchaKey") String captchaKey,
+            @RequestParam("captchaCode") String captchaCode) {
         try {
-            Map<String, Object> result = authService.register(request);
+            Map<String, Object> result = authService.register(request, captchaKey, captchaCode);
             return ApiResponse.success("注册成功", result);
         } catch (RuntimeException e) {
             return ApiResponse.error(400, e.getMessage());
@@ -35,6 +38,38 @@ public class AuthController {
             return ApiResponse.success("登录成功", result);
         } catch (RuntimeException e) {
             return ApiResponse.error(401, e.getMessage());
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponse<Map<String, Object>> refreshToken(@RequestBody Map<String, String> body) {
+        try {
+            String refreshToken = body.get("refreshToken");
+            Map<String, Object> result = authService.refreshToken(refreshToken);
+            return ApiResponse.success("刷新成功", result);
+        } catch (RuntimeException e) {
+            return ApiResponse.error(401, e.getMessage());
+        }
+    }
+
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        try {
+            authService.logout(userId);
+            return ApiResponse.success("退出成功", null);
+        } catch (RuntimeException e) {
+            return ApiResponse.error(400, e.getMessage());
+        }
+    }
+
+    @GetMapping("/captcha")
+    public ApiResponse<Map<String, Object>> getCaptcha() {
+        try {
+            Map<String, Object> result = authService.generateCaptcha();
+            return ApiResponse.success(result);
+        } catch (RuntimeException e) {
+            return ApiResponse.error(500, e.getMessage());
         }
     }
 

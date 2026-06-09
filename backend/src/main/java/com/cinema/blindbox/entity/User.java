@@ -29,6 +29,15 @@ public class User {
     @Column(length = 200)
     private String favoriteGenres;
 
+    @Column(name = "login_attempt_count")
+    private Integer loginAttemptCount = 0;
+
+    @Column(name = "lock_time")
+    private LocalDateTime lockTime;
+
+    @Column(name = "password_migrated")
+    private Boolean passwordMigrated = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
