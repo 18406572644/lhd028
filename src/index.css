@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --retro-brown: #2C1810;
+  --retro-brown-light: #3D2517;
+  --retro-brown-dark: #1A0E08;
+  --retro-gold: #D4A574;
+  --retro-gold-light: #E8C9A0;
+  --retro-gold-dark: #B8864A;
+  --retro-crimson: #C41E3A;
+  --retro-crimson-light: #E03050;
+  --retro-cream: #FFF8F0;
+  --retro-cream-dark: #F0E6D8;
+  --retro-orange: #B8602A;
+  --retro-orange-light: #D4783A;
+
+  font-family: 'Noto Sans SC', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--retro-cream);
+  background-color: var(--retro-brown-dark);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--retro-brown-dark);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--retro-brown-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--retro-gold-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--retro-gold);
+}
+
+::selection {
+  background: var(--retro-crimson);
+  color: var(--retro-cream);
+}
+
+@keyframes filmGrain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1px, -1px); }
+  20% { transform: translate(1px, 0); }
+  30% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  50% { transform: translate(-1px, 0); }
+  60% { transform: translate(1px, 1px); }
+  70% { transform: translate(0, -1px); }
+  80% { transform: translate(-1px, 1px); }
+  90% { transform: translate(1px, 0); }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes boxFlip {
+  0% { transform: perspective(800px) rotateY(0deg); }
+  50% { transform: perspective(800px) rotateY(90deg) scale(1.1); }
+  100% { transform: perspective(800px) rotateY(0deg); }
+}
+
+.film-grain-overlay {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200%;
+  background: transparent url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+  z-index: 9999;
+  animation: filmGrain 0.5s steps(4) infinite;
+  opacity: 0.5;
+}
+
+.ant-btn-primary {
+  background: var(--retro-crimson) !important;
+  border-color: var(--retro-crimson) !important;
+}
+
+.ant-btn-primary:hover {
+  background: var(--retro-crimson-light) !important;
+  border-color: var(--retro-crimson-light) !important;
+}
+
+.ant-input,
+.ant-select-selector,
+.ant-picker {
+  background-color: var(--retro-brown-light) !important;
+  border-color: var(--retro-gold-dark) !important;
+  color: var(--retro-cream) !important;
+}
+
+.ant-input::placeholder {
+  color: var(--retro-gold-dark) !important;
+}
+
+.ant-pagination .ant-pagination-item a {
+  color: var(--retro-gold);
+}
+
+.ant-pagination .ant-pagination-item-active {
+  border-color: var(--retro-crimson);
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: var(--retro-crimson);
+}
+
+.ant-tag {
+  border-color: var(--retro-gold-dark);
+}
+
+.ant-modal .ant-modal-content {
+  background-color: var(--retro-brown);
+  border: 1px solid var(--retro-gold-dark);
+}
+
+.ant-modal .ant-modal-header {
+  background-color: var(--retro-brown);
+}
+
+.ant-modal .ant-modal-title {
+  color: var(--retro-gold);
+}
+
+.ant-modal .ant-modal-close {
+  color: var(--retro-gold);
+}
+
+.film-perforations {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--retro-gold-dark) 0px,
+    var(--retro-gold-dark) 4px,
+    transparent 4px,
+    transparent 10px
+  );
+  width: 12px;
+  min-height: 100%;
+}
+
+.retro-card {
+  background: linear-gradient(145deg, var(--retro-brown-light), var(--retro-brown));
+  border: 1px solid var(--retro-gold-dark);
+  transition: all 0.3s ease;
+}
+
+.retro-card:hover {
+  border-color: var(--retro-gold);
+  box-shadow: 0 0 20px rgba(212, 165, 116, 0.15);
+}
