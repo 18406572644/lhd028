@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
+import { ParticlesProvider } from '@tsparticles/react';
+import { loadSlim } from '@tsparticles/slim';
 import Layout from '@/components/Layout';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
@@ -33,23 +35,25 @@ const antTheme = {
 export default function App() {
   return (
     <ConfigProvider theme={antTheme} locale={zhCN}>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/share/:code" element={<ShareView />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="movies" element={<Movies />} />
-            <Route path="movies/:id" element={<MovieDetail />} />
-            <Route path="blindbox" element={<BlindBox />} />
-            <Route path="collection" element={<Collection />} />
-            <Route path="collection/:id" element={<CollectionDetail />} />
-            <Route path="history" element={<History />} />
-            <Route path="share" element={<Share />} />
-            <Route path="stats" element={<Stats />} />
-          </Route>
-        </Routes>
-      </Router>
+      <ParticlesProvider init={loadSlim}>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/share/:code" element={<ShareView />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="movies" element={<Movies />} />
+              <Route path="movies/:id" element={<MovieDetail />} />
+              <Route path="blindbox" element={<BlindBox />} />
+              <Route path="collection" element={<Collection />} />
+              <Route path="collection/:id" element={<CollectionDetail />} />
+              <Route path="history" element={<History />} />
+              <Route path="share" element={<Share />} />
+              <Route path="stats" element={<Stats />} />
+            </Route>
+          </Routes>
+        </Router>
+      </ParticlesProvider>
     </ConfigProvider>
   );
 }
