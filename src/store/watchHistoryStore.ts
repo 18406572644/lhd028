@@ -31,7 +31,9 @@ const useWatchHistoryStore = create<WatchHistoryState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.get('/watch-history');
-      set({ history: data.data || [], loading: false });
+      const rawData = data.data;
+      const list = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.list) ? rawData.list : [];
+      set({ history: list, loading: false });
     } catch {
       set({ loading: false });
     }

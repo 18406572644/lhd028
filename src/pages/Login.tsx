@@ -16,7 +16,9 @@ export default function Login() {
       initAuth();
       message.success('登录成功');
       navigate('/');
-    } catch {}
+    } catch {
+      message.error('登录失败，请检查用户名和密码');
+    }
   };
 
   const handleRegister = async (values: { username: string; password: string; nickname: string }) => {
@@ -25,7 +27,9 @@ export default function Login() {
       initAuth();
       message.success('注册成功');
       navigate('/');
-    } catch {}
+    } catch {
+      message.error('注册失败，请稍后重试');
+    }
   };
 
   return (

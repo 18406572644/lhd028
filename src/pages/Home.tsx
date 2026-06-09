@@ -14,7 +14,7 @@ export default function Home() {
     fetchMovies();
   }, [fetchMovies]);
 
-  const hotMovies = movies.slice(0, 8);
+  const hotMovies = Array.isArray(movies) ? movies.slice(0, 8) : [];
 
   return (
     <div className="space-y-8">

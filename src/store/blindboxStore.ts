@@ -68,7 +68,9 @@ const useBlindboxStore = create<BlindBoxState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.get('/blindbox/my');
-      set({ myBlindboxes: data.data?.list || data.list || [], loading: false });
+      const rawData = data.data;
+      const list = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.list) ? rawData.list : [];
+      set({ myBlindboxes: list, loading: false });
     } catch {
       set({ loading: false });
     }
@@ -78,7 +80,9 @@ const useBlindboxStore = create<BlindBoxState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.get('/blindbox/collections');
-      set({ collections: data.data?.list || data.list || [], loading: false });
+      const rawData = data.data;
+      const list = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.list) ? rawData.list : [];
+      set({ collections: list, loading: false });
     } catch {
       set({ loading: false });
     }

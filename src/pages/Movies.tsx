@@ -8,6 +8,7 @@ const genres = ['全部', '剧情', '喜剧', '动作', '爱情', '科幻', '悬
 
 export default function Movies() {
   const { movies, filters, loading, fetchMovies, setFilters } = useMovieStore();
+  const safeMovies = Array.isArray(movies) ? movies : [];
 
   useEffect(() => {
     fetchMovies();
@@ -78,12 +79,12 @@ export default function Movies() {
             <div className="flex justify-center py-20">
               <Spin size="large" />
             </div>
-          ) : movies.length === 0 ? (
+          ) : safeMovies.length === 0 ? (
             <Empty description={<span className="text-retro-cream-dark">暂无电影</span>} />
           ) : (
             <>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {movies.map((movie, i) => (
+                {safeMovies.map((movie, i) => (
                   <motion.div
                     key={movie.id}
                     initial={{ opacity: 0, y: 20 }}

@@ -28,7 +28,9 @@ const useReviewStore = create<ReviewState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.get('/reviews', { params: { movieId } });
-      set({ reviews: data.data || [], loading: false });
+      const rawData = data.data;
+      const list = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.list) ? rawData.list : [];
+      set({ reviews: list, loading: false });
     } catch {
       set({ loading: false });
     }

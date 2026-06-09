@@ -4,6 +4,7 @@ D:\lhd028\backend\src\main\java\com\cinema\blindbox\dto\ShareRequest.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\repository\UserRepository.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\util\JwtUtil.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\dto\LoginRequest.java
+D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\ShareType.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\User.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\BlindBox.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\service\AuthService.java
@@ -24,6 +25,7 @@ D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\WatchHistory.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\controller\ShareController.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\Share.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\controller\StatsController.java
+D:\lhd028\backend\src\main\java\com\cinema\blindbox\entity\WatchStatus.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\dto\ReviewRequest.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\controller\FileUploadController.java
 D:\lhd028\backend\src\main\java\com\cinema\blindbox\config\CorsConfig.java

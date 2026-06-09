@@ -50,9 +50,11 @@ const useMovieStore = create<MovieState>((set, get) => ({
       if (filters.keyword) params.keyword = filters.keyword;
       if (filters.genre) params.genre = filters.genre;
       const data: any = await request.get('/movies', { params });
-      set({ movies: data.data || [], loading: false });
+      const rawData = data.data;
+      const list = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.list) ? rawData.list : [];
+      set({ movies: list, loading: false });
     } catch {
-      set({ loading: false });
+      set((state) => ({ movies: Array.isArray(state.movies) ? state.movies : [], loading: false }));
     }
   },
 
@@ -60,9 +62,9 @@ const useMovieStore = create<MovieState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.get(`/movies/${id}`);
-      set({ currentMovie: data.data, loading: false });
+      set({ currentMovie: data.data || null, loading: false });
     } catch {
-      set({ loading: false });
+      set({ currentMovie: null, loading: false });
     }
   },
 

@@ -45,11 +45,15 @@ const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.post('/auth/login', { username, password });
-      const token = data.data?.token || data.token;
-      const user = data.data?.user || data.user;
+      const responseData = data.data || data;
+      const token = responseData?.token;
+      const user = responseData?.user;
+      if (!token) {
+        throw new Error('登录响应缺少令牌');
+      }
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      set({ token, user, isLoggedIn: true, loading: false });
+      localStorage.setItem('user', JSON.stringify(user || {}));
+      set({ token, user: user || null, isLoggedIn: true, loading: false });
     } catch (error) {
       set({ loading: false });
       throw error;
@@ -60,11 +64,15 @@ const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true });
     try {
       const data: any = await request.post('/auth/register', { username, password, nickname });
-      const token = data.data?.token || data.token;
-      const user = data.data?.user || data.user;
+      const responseData = data.data || data;
+      const token = responseData?.token;
+      const user = responseData?.user;
+      if (!token) {
+        throw new Error('注册响应缺少令牌');
+      }
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      set({ token, user, isLoggedIn: true, loading: false });
+      localStorage.setItem('user', JSON.stringify(user || {}));
+      set({ token, user: user || null, isLoggedIn: true, loading: false });
     } catch (error) {
       set({ loading: false });
       throw error;
