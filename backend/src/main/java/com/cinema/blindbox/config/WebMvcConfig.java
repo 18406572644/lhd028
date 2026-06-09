@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/captcha", "/api/shares/**", "/api/lists", "/api/lists/{id}", "/api/lists/{id}/comments", "/uploads/**");
+                .excludePathPatterns("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/captcha", "/api/shares/**", "/api/lists", "/api/lists/*", "/api/lists/*/comments", "/uploads/**");
     }
 
     @Override

@@ -35,6 +35,9 @@ public class MovieListService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private WatchHistoryRepository watchHistoryRepository;
+
     @Transactional
     public Map<String, Object> createList(Long userId, MovieListRequest request) {
         MovieList movieList = new MovieList();
@@ -314,12 +317,10 @@ public class MovieListService {
     public Map<String, Object> generateYearReview(Long userId) {
         List<WatchHistory> watchedMovies = new ArrayList<>();
         try {
-            watchedMovies = watchedMovies(userId);
+            watchedMovies = watchHistoryRepository.findByUserIdOrderByWatchedAtDesc(userId);
         } catch (Exception e) {
             watchedMovies = new ArrayList<>();
         }
-
-        List<Review> userReviews = new ArrayList<>();
 
         String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         List<MovieList> existingLists = movieListRepository.findByUserIdOrderByCreatedAtDesc(userId);
@@ -362,10 +363,6 @@ public class MovieListService {
         }
 
         return buildListResponse(saved, userId);
-    }
-
-    private List<WatchHistory> watchedMovies(Long userId) {
-        return new ArrayList<>();
     }
 
     private Map<String, Object> buildListResponse(MovieList ml, Long currentUserId) {

@@ -112,3 +112,44 @@ CREATE TABLE IF NOT EXISTS refresh_token (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     revoked_at DATETIME
 );
+
+CREATE TABLE IF NOT EXISTS movie_list (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(500),
+    cover VARCHAR(500),
+    visibility VARCHAR(20) DEFAULT 'PUBLIC',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES `user`(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS movie_list_item (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    list_id BIGINT NOT NULL,
+    movie_id BIGINT NOT NULL,
+    sort_order INT DEFAULT 0,
+    tag VARCHAR(50),
+    FOREIGN KEY (list_id) REFERENCES movie_list(id) ON DELETE CASCADE,
+    FOREIGN KEY (movie_id) REFERENCES movie(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS list_comment (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    list_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    content TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (list_id) REFERENCES movie_list(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES `user`(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS list_collection (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    list_id BIGINT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_user_list (user_id, list_id),
+    FOREIGN KEY (user_id) REFERENCES `user`(id) ON DELETE CASCADE,
+    FOREIGN KEY (list_id) REFERENCES movie_list(id) ON DELETE CASCADE
+);
