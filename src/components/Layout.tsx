@@ -10,6 +10,7 @@ import {
   BarChartOutlined,
   UserOutlined,
   LogoutOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Avatar, Dropdown, message } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,6 +21,7 @@ const navItems = [
   { key: '/', icon: <HomeOutlined />, label: '首页' },
   { key: '/movies', icon: <VideoCameraOutlined />, label: '电影库' },
   { key: '/blindbox', icon: <GiftOutlined />, label: '开盲盒' },
+  { key: '/lists', icon: <UnorderedListOutlined />, label: '片单' },
   { key: '/collection', icon: <HeartOutlined />, label: '我的收藏' },
   { key: '/history', icon: <HistoryOutlined />, label: '观影记录' },
   { key: '/share', icon: <ShareAltOutlined />, label: '好友分享' },

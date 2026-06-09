@@ -15,6 +15,10 @@ import History from '@/pages/History';
 import Share from '@/pages/Share';
 import ShareView from '@/pages/ShareView';
 import Stats from '@/pages/Stats';
+import Lists from '@/pages/Lists';
+import ListDetail from '@/pages/ListDetail';
+import ListCreate from '@/pages/ListCreate';
+import ListEdit from '@/pages/ListEdit';
 
 const antTheme = {
   algorithm: theme.darkAlgorithm,
@@ -50,6 +54,10 @@ export default function App() {
               <Route path="history" element={<History />} />
               <Route path="share" element={<Share />} />
               <Route path="stats" element={<Stats />} />
+              <Route path="lists" element={<Lists />} />
+              <Route path="lists/create" element={<ListCreate />} />
+              <Route path="lists/:id" element={<ListDetail />} />
+              <Route path="lists/:id/edit" element={<ListEdit />} />
             </Route>
           </Routes>
         </Router>
